@@ -1,0 +1,34 @@
+---
+title: When Is It Time To Kill Your Pet Project?
+published: true
+description: How do you know when it's time to move on
+tags: JavaScript, React, life, opensource
+cover_image: https://images.unsplash.com/photo-1559167147-8ed7885ee190?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80
+---
+
+When it's time to kill your pet project, it's probably not easy to do it, after all you've spent so much time already and had such big plans for it! But how will you know when it's time to kill it? This is my story of how I knew I had to fish or cut bait on my pet project, polyrhythm.
+
+---
+Everyone in the house was asleep, It was almost midnight, and I was up talking to myself in the bathroom mirror while I cleaned it, determined that night to make another example app to play with, for my pet project [polyrhythm](https://github.com/deanius/polyrhythm). That's when it happened. The thought that couldn't be shook came and said _You either finish that example tonight, or you need to write a post on, and follow through with - killing your pet project._
+
+I knew at that instant that it was absolutely worth giving the project killing post a try. After all, if I could kill my own interest in something that wasn't paying the bills, then why not? It's not like as a husband and father I couldn't reclaim that time, if my employer didn't need it. I decided to face some hard truths. Or at least dare myself to look at them before I continued down the road I was on. And so should you.
+
+I don't think I need to tell you **how** to kill your pet project - that would be different for everyone. But I think I can tell you, from personal experience, **when** it might be time to kill it.
+
+---
+
+I had started polyrhythm while at a client nearly 3 years ago. It was a major upgrade in my role, and I was motivated to do the best work I could for them. Part of that work caused remnants to drop on the floor, figuratively, and I would save those remnants. On my commute home, I'd toy with how they fit together, and that's when version 1 took shape. I enjoyed applying this project to some long-standing problems I'd had that I felt previous tools inadequately addressed. ** But when that client engagement ended, I got my first warning sign that I was addicted: I told myself that polyrhythm would be my next meal ticket, if only I could develop it enough. And between that engagement and the next one I got, I built dozens of sample apps upon polyrhythm, wrote dozens of gitbook pages as tutorials. It helped my chops- but didn't help my life though. I needed every spare minute for polyrhythm, so when I was around my family I was distracted. I wish I could say that distractedness was unique to that period of time, but it wasn't. And this brings us to the first warning sign: you want to spend **all** the time on it. It's fine to have a dream, to be "building a boat" in the garage, but to confuse that with real work is really dangerous since you can be chasing something that will never pay off.
+
+The next warning sign came after I instructed a 12 week JavaScript bootcamp. This didn't leave me with after-hours time for polyrhythm at all, but it did fill my head with ideas on how polyrhythm could simplify so many of the things these students were learning in NodeJS, JQuery MongoDB and React. I thought it was actually unfair to put them through so many different API styles (synchronous DOM updates, callbacks, Promises, React class-based and functional components, `async/await`, while they were just getting their feet underneath them with coding! I just knew then, and still believe now, that if you start with polyrhythm, then you can have nicer architecture and end results than with nearly any other web framework. And so after that engagement ended, I took my freshly-honed teaching skills and made even MORE polyrhythm examples, demos and documentation. But still, it was me working on my pet project. No plans to monetize it, no business model - just a better way **for me**, that I wanted to explore and share, but it consumed so much time for me exploring it.
+
+On another engagement, I was using React again, and growing really frustrated with the growing list of props. The problem was - there were too many props, many of them functions that had to be carefully memoized - yuck! So with an aim to see how it could help in a React context and help with the prop-passing and prop-drilling problem, and with the chance to re-write it in TypeScript, my interest in polyrhythm got a new boost. 
+
+But the next warning sign showed up too—when I told people about it, their follow-up questions showed I'd missed the mark. One was confused by its lack of a concise "elevator pitch". One said "You've clearly put a lot of work into this - why?", and others just nodded politely. If I was able to use the same tool to build 60FPS games as regular CRUD over REST or even WebSockets - why were others not excited as I was? And the warning sign is this: you tell yourself you just need to work harder (on your explanations, examples, code, tests, etc)  and *then* everyone will understand. This kind of logic justifies what is really an addictive behavior, and has little to do with its likeliness to show a return. If you find yourself here, you are in yellow-light territory.
+
+But the final red-light warning sign was its death knell: I could not find the time to fit in the ever growing list of ideas for it. My ambitions had grown far beyond my capacity. And the plans I'd concoct to keep going how I was were increasingly met with resistance by reality and time constraints. I'd rationalize that it wouldn't take long since it was **only** an adjustment. I just did not have that kind of time. And I started to realize it just wasn't making me feel good anymore. I'd feel guilt that I wasn't feeding the Monster rather than the joy of playing with it or sharing it. I'd be missing moments with my wife and children when I was distracted or unhappy with that day's progress. When you know this, you must be kind to yourself, and others, and you have to kill it.
+
+If you recognize yourself in this story, only you know if killing your project is what you need to do. If you do, though, one way to make it easier on yourself is to remind yourself that it will be there for you to return to if it becomes useful due to new circumstances. Another is to pick up a different hobby - like the banjo, or juggling or something - one that let's you be excited in a similar, but where you cannot get so deeply involved. 
+
+If you love what you do, you owe it to yourself to focus on the things with the highest impact. Your pet projects should be those things whose promise of exciting results is bringing you joy, or into ever-richer sharing and conversation. It should be a net positive. And when it goes south, well, you can be kind, but you know what you have to do. 
+
+
