@@ -10,7 +10,7 @@ TL;DR The Radcliffe Concurrency Model is a way of understanding how a computer r
 
 ![The Radcliffe Model of Concurrency](https://s3.amazonaws.com/www.deanius.com/RadcliffeConcurrencyModel.png)
 
-Interruptions are a fact of life. Nobody has the luxury of being able to single-task on each thing they start until its sweet completion. No— life is more like this: 
+Interruptions are a fact of life. Nobody has the luxury of being able to single-task on each thing they start until its sweet completion. No— life is more like this:
 
 - Kid: "Dad, I want a grilled cheese, please."
 - Dad: _starts making a grilled cheese sandwich..._
@@ -34,7 +34,7 @@ In User Interface / UX these strategies must be chosen and used everywhere! A us
 
 Front-end development, back-end development, and every person you know depends upon selecting good Concurrency Strategies. Then, why don't we know what they are? Is there a listable set? There is, and the Radcliffe Model of Concurrency makes them available for our understanding, so that we can choose the correct one for each UX, or life situation.
 
-_(Also a JavaScript library [𝗥𝘅𝑓𝑥](https://github.com/deanrad/rxfx) makes them available to program with directly)_
+_(Also a JavaScript library [RxFx](https://github.com/deanrad/rxfx) makes them available to program with directly)_
 
 ## Knowing Our Options is Empowering
 
@@ -51,7 +51,6 @@ The other two modes sound funny when applied to humans, but are still relevant s
 
 So, it was out of necessity, that the Radcliffe Model was born!
 
-
 ## The Radcliffe Model of Concurrency
 
 The modes in the Radcliffe Model, in English are:
@@ -64,13 +63,13 @@ The modes in the Radcliffe Model, in English are:
 
 ![The Radcliffe Model of Concurrency](https://s3.amazonaws.com/www.deanius.com/RadcliffeConcurrencyModel.png)
 
-I recognize these might not be the names you'd call these - you may have used `serial` and `parallel`, for either of the top 2 modes. Fine! But the value is not in what they are called, but the fact _that they are known as an entire set._ 
+I recognize these might not be the names you'd call these - you may have used `serial` and `parallel`, for either of the top 2 modes. Fine! But the value is not in what they are called, but the fact _that they are known as an entire set._
 
 Sometimes, trying to fulfill every request of you, as **Immediate** and **Queueing** modes do - stretches resources too thin. The **Blocking** mode may smartly reduce concurrency by favoring a prior request, just as an elevator that is already requested does nothing on subsequent calls to the same floor. The **Replacing** mode is seen in how one video playing replaces another when we browse a social site, or how your session timeout keeps starting over after activity. And **Toggling** is what a one-button power switch does - more on **Toggling** later.
 
 The reason to learn this model is that getting a computer program, UX, or human behavior to be correct is often done simply by _choosing the best mode from the list!_
 
-I'll save an elaboration and derivation of each mode for another article. The graphic arranges them spatially to show how they relate, and at the end of the article are some trading-card-style images you can even print as a reference! (And play Oblique Strategies with them if you like) 
+I'll save an elaboration and derivation of each mode for another article. The graphic arranges them spatially to show how they relate, and at the end of the article are some trading-card-style images you can even print as a reference! (And play Oblique Strategies with them if you like)
 
 ## Yes, Toggling is a Real Thing!
 
@@ -82,7 +81,7 @@ Sometimes the presence of a 2nd request - like a second nightly file put into th
 
 ## Go Forth and Be Concurrent!
 
-You can use this model to further your or your colleagues' understandings of multitasking strategies. Or if you program asynchronous systems like User Interfaces, you can use [𝗥𝘅𝑓𝑥](https://github.com/deanrad/rxfx/tree/main/bus), to have the easiest, framework-free async programming experience you could have.
+You can use this model to further your or your colleagues' understandings of multitasking strategies. Or if you program asynchronous systems like User Interfaces, you can use [RxFx](https://github.com/deanrad/rxfx/tree/main/bus), to have the easiest, framework-free async programming experience you could have.
 
 To share it, just consult the [Attribution-Share-alike license](https://creativecommons.org/licenses/by-sa/4.0/), which generally says it is free to share,provided you attribute the author and maintain the same terms.
 

@@ -1,18 +1,18 @@
 ---
-title: 𝗥𝘅𝑓𝑥 - A productivity layer around RxJS.
+title: RxFx - A productivity layer around RxJS.
 published: true
-description: RxJS and Observables, solve 2 problems that every dev has, and now you can interface with it through a simpler API with 𝗥𝘅𝑓𝑥.
+description: RxJS and Observables, solve 2 problems that every dev has, and now you can interface with it through a simpler API with RxFx.
 tags: RxJS, RxFx, eventbus, pubsub
 cover_image: https://www.sarathi.org/images/articles/telegraph-operator.jpg
 ---
 
 RxJS and Observables solve 2 problems that every front-end dev has: Tuning async code for performance and eliminating race conditions for optimal UX.
 
-In this post, we'll deep-dive into building an example with the two main abstractions for async in 𝗥𝘅𝑓𝑥: the bus listener, and the service.
+In this post, we'll deep-dive into building an example with the two main abstractions for async in RxFx: the bus listener, and the service.
 
 # Example: Swipe To Refresh
 
-*Obective:* Build a "Swipe To Refresh" UX widget with an 𝗥𝘅𝑓𝑥 event bus from [`@rxfx/bus`](https://github.com/deanrad/rxfx/tree/main/bus), and a service on that bus from [`@rxfx/service`](https://github.com/deanrad/rxfx/tree/main/service). 
+_Obective:_ Build a "Swipe To Refresh" UX widget with an RxFx event bus from [`@rxfx/bus`](https://github.com/deanrad/rxfx/tree/main/bus), and a service on that bus from [`@rxfx/service`](https://github.com/deanrad/rxfx/tree/main/service).
 
 _(A complete version is here [on StackBlitz](https://stackblitz.com/edit/rxjs-refresh-jg6uy6?devtoolsheight=40&file=README.md,index.ts), and built incrementally [on GitHub](https://github.com/deanrad/rxfx-example-swipe-to-refresh-blitz/pull/15/files))_
 
@@ -23,11 +23,12 @@ A drag-and-drop UI widget that can trigger a refresh.
 ![](https://s3.amazonaws.com/www.deanius.com/rxfx-swipe-to-refresh-demo.gif)
 
 The requirements are:
- - The dot is draggable
- - The dot triggers a refresh when it overlaps the darker dot.
- - The dot's position resets upon refresh or release.
- - The time displays 1 second after a refresh
- - During time refresh, no other refreshes can begin, and the dot is not draggable.
+
+- The dot is draggable
+- The dot triggers a refresh when it overlaps the darker dot.
+- The dot's position resets upon refresh or release.
+- The time displays 1 second after a refresh
+- During time refresh, no other refreshes can begin, and the dot is not draggable.
 
 # Overview
 
@@ -45,6 +46,7 @@ Then to cap it all off, we'll trigger the Time Listener when the Pointer Service
 We're starting with a styled HTML document, and a module of DOM mutating functions. We'll place these in `services/DOM`. Our time lookup will go in `services/time`, and our pointer service in `services/pointer`. A bus will connect all of these, allowing for centralized logging, error handling, etc.
 
 ## Install The Bus
+
 The bus is like a `Subject`, on which `next` is renamed to `trigger`, and `listenBlocking(cond, handler)` is a shortcut for `subject.asObservable().pipe(filter(cond), exhaustMap(handler))`. It comes pre-wired in a single import.
 
 Understanding that, let's declare a bus that accepts strings, and listen for those to implement the refresh side
@@ -59,29 +61,33 @@ const bus = new Bus<string>();
 
 ## A delayed value with `@rxfx/after`
 
-The original Swipe-To-Refresh demo on [LearnRxjs.io](https://www.learnrxjs.io/learn-rxjs/recipes/swipe-to-refresh) demo uses no fewer than 4 functions to create a delayed time endpoint: `of`, `delay`, `pipe` and `tap`. 
+The original Swipe-To-Refresh demo on [LearnRxjs.io](https://www.learnrxjs.io/learn-rxjs/recipes/swipe-to-refresh) demo uses no fewer than 4 functions to create a delayed time endpoint: `of`, `delay`, `pipe` and `tap`.
 
 We can declare a fake value using `after` from `@rxfx/after` with only one. Depending on whether we want the time computed at the beginning or the end, we can call `after` with either a value or a function.
 
 ```js
-const fakeDateNow = after(2000, Date.now()) // 
-const fakeDateAtEnd = after(2000, () => Date.now()) // 
+const fakeDateNow = after(2000, Date.now()); //
+const fakeDateAtEnd = after(2000, () => Date.now()); //
 
 const fakeEndpoint = () => fakeDateAtEnd;
 ```
 
 ## On request, call the time 'endpoint'
+
 Now, we'll create a bus listener to respond with the fake data. Suppose the initiation of the time lookup is to begin when an item equal to `time/request` goes on the bus.
 
 ```js
-bus.listen(event => event === `time/request`, () => fakeEndpoint())
+bus.listen(
+  (event) => event === `time/request`,
+  () => fakeEndpoint()
+);
 ```
 
 We intentionally return the deferred value of the date from the handler. This would work whether the return value was a Promise or an RxJS Observable. Since `after` is an Observable, thus lazy, we return it to the bus so that it can call `.subscribe()` on it. But we don't want to subscribe to a new delayed date if one is pending already, so let's solve that.
 
 ## Don't refresh while already refreshing
 
-Using the console, we see that calling `bus.trigger(TIME_REQUEST)` twice results in double loading messages. 
+Using the console, we see that calling `bus.trigger(TIME_REQUEST)` twice results in double loading messages.
 
 To adjust this In raw RxJS we would `pipe` something through an `exhaustMap`, but we can skip those imports.
 
@@ -90,29 +96,32 @@ In contrast to `bus#listen`, `bus#listenBlocking` takes the same arguments, but 
 ```diff
 - bus.listen(
 + bus.listenBlocking(
-  event => event === `time/request`, 
+  event => event === `time/request`,
   () => fakeEndpoint()
 )
 ```
+
 Even if our UI will disable things, this makes the intention clear to those reading it. Now lets see these results in the DOM!
 
 ## On reponse, update the DOM
 
-We have a couple of wrapper functions around our DOM mutation functions, called `handleRequestBegin` and `handleRequestDone`, which will update the DOM with the text `...loading...`, or the new date, respectively. 
+We have a couple of wrapper functions around our DOM mutation functions, called `handleRequestBegin` and `handleRequestDone`, which will update the DOM with the text `...loading...`, or the new date, respectively.
 
 To recap, the arguments to `listen*` are:
-  - **cause** - the condition that will cause the effect
-  - **effect** - the side-effecting function to call
 
-and to this we'll now add:  
-  - **reactions** - callbacks that will react to life-cycle events of the Effect.
+- **cause** - the condition that will cause the effect
+- **effect** - the side-effecting function to call
+
+and to this we'll now add:
+
+- **reactions** - callbacks that will react to life-cycle events of the Effect.
 
 This `observer` will be `tap`-ped in without us needing to import `tap`, `finalize`, or others.
 
 ```js
 const handleRequestBegin = () => {
-  console.log('loading...');
-  setData('loading...');
+  console.log("loading...");
+  setData("loading...");
 };
 
 bus.listen(
@@ -126,9 +135,10 @@ bus.listen(
 ```
 
 ## Time Listener Complete!
+
 This completes our time listener! Whenever anyone calls `trigger(TIME_REQUEST)`, the time will go in the DOM with **Blocking** behavior. We've cut out a lot of operators at this point, but we can do more.
 
-Let's build the Swipe-To-Refresh pointer functionality out of the higher-level 𝗥𝘅𝑓𝑥 building block - the `@rxfx/service`, akin to `createAsyncThunk` or NgRx, and continue to drop operators.
+Let's build the Swipe-To-Refresh pointer functionality out of the higher-level RxFx building block - the `@rxfx/service`, akin to `createAsyncThunk` or NgRx, and continue to drop operators.
 
 # Pointer Service
 
@@ -147,16 +157,17 @@ const mouseMoveYs: Observable<number> = () => null
 The arguments are the namespace, for logging purposes, the bus on which it will put responses, and the effect. The effect will return an Observable of responses, and these will go onto our bus as they occur.
 
 ## DOM listeners talk to the Pointer service
+
 Now we can add DOM listeners that will pass the service the string 'up' or 'down'.
 
 ```js
 const sendDown = (e: Event) => {
   e.preventDefault();
-  pointerService.request('down');
+  pointerService.request("down");
 };
 const sendUp = (e: Event) => {
   e.preventDefault();
-  pointerService.request('up');
+  pointerService.request("up");
 };
 
 export const connectDOMEventsToPointerService = () => {
@@ -168,8 +179,9 @@ export const connectDOMEventsToPointerService = () => {
 We'll write a `disconnectDOMEventsFromPointerService` function as well, not shown here. First - let's specify this service's effect and its responses.
 
 ## On down, moves become responses (until up)
+
 First, let's ensure we're `spy`ing on all bus events so we can see what's going on even before we hook it up to the UI.
- 
+
 Now, import `fromEvent` and `map` from RxJS..
 
 ```js
@@ -186,6 +198,7 @@ Try pressing the mouse down, and notice how as you move the pointer, the console
 {type: 'pointer/next', payload: 10}
 {type: 'pointer/next', payload: 11}
 ```
+
 Now, we add in cancelation with `takeUntil`.
 
 ```js
@@ -200,6 +213,7 @@ const mouseMoveYs: Observable<number> = () => {
 We're using operators, but only for their intended purposes. Now, when it comes to updating the DOM, our `service` gives us choices and modularity that raw RxJS doesn't.
 
 ## Dot follows pointer / is dragged
+
 We established that `pointerService` has responses that are of type `number`, right? And we have a `setRefreshPos` function that changes the DOM position of the refresh dot. So all we need is:
 
 ```js
@@ -228,7 +242,7 @@ Now let's hook up our final part, the refresh!
 
 ## On move, if far enough, cancel drag and trigger the time refresh
 
-We can listen to our service's responses as a stream, and if we exceed the Y threshold to trigger the refresh, we can reset the refresh button by canceling it. 
+We can listen to our service's responses as a stream, and if we exceed the Y threshold to trigger the refresh, we can reset the refresh button by canceling it.
 
 ```js
 pointerService.responses.subscribe(({ payload: y }) => {
@@ -247,10 +261,9 @@ I wouldn't want to miss describing one of the great features of `@rxfx/service` 
 
 ```js
 pointerService.isActive.subscribe((isActive) => {
-  const method = isActive ? 'add' : 'remove';
-  document.getElementById('refresh').classList[method]('isDragging');
+  const method = isActive ? "add" : "remove";
+  document.getElementById("refresh").classList[method]("isDragging");
 });
-
 ```
 
 ## While refreshing, the dot is not draggable
@@ -261,13 +274,13 @@ But since we already have functions in the Time Listener's Observer we can use t
 
 ```js
 const handleRequestBegin = () => {
-  console.log('loading...');
-+ disconnectDOMEventsFromPointerService();
-  setData('loading...');
+  console.log("loading...");
+  +disconnectDOMEventsFromPointerService();
+  setData("loading...");
 };
 ```
 
-Now, as our _coup-de-grâce_, we have implemented a form of blocking mode by hand to complete our widget! 
+Now, as our _coup-de-grâce_, we have implemented a form of blocking mode by hand to complete our widget!
 
 [PR of Pointer Service](https://github.com/deanrad/rxfx-example-swipe-to-refresh-blitz/pull/18/files)
 
@@ -275,9 +288,9 @@ Now, as our _coup-de-grâce_, we have implemented a form of blocking mode by han
 
 # Summary
 
-We used fewer individual RxJS operators to build the 𝗥𝘅𝑓𝑥 way than with raw RxJS. The service and listener concepts let us apply operators without creating a giant chain. Features are added separately, with little interference to each other.
+We used fewer individual RxJS operators to build the RxFx way than with raw RxJS. The service and listener concepts let us apply operators without creating a giant chain. Features are added separately, with little interference to each other.
 
-With 𝗥𝘅𝑓𝑥 your app is mostly a list of tuples of:
+With RxFx your app is mostly a list of tuples of:
 
 ```
 [cause1, effect1, reactions1[]]
@@ -288,4 +301,4 @@ Your app grows in a maintainable and performant fashion — at least, it has for
 
 Enjoy building and listening!
 
-𝗥𝘅𝑓𝑥 Creator, Dean Radcliffe
+RxFx Creator, Dean Radcliffe

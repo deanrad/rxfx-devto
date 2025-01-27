@@ -1,5 +1,5 @@
 ---
-title: How an Interview Convinced Me to Use 𝗥𝘅𝑓𝑥 and RxJS for Effect Management in React
+title: How an Interview Convinced Me to Use RxFx and RxJS for Effect Management in React
 published: true
 description:
 tags: rxjs, rxfx, JavaScript, React
@@ -8,7 +8,7 @@ cover_image: https://images.unsplash.com/photo-1574720187210-421b34c9cf01?ixlib=
 
 Edit: Here is [part 2](https://dev.to/deanius/excellent-effect-management-in-react-with-and-rxjs-35cn) of this series.
 
-Note: Some images refer to the library's old name "Omnibus-RxJS" and have not been updated to 𝗥𝘅𝑓𝑥.
+Note: Some images refer to the library's old name "Omnibus-RxJS" and have not been updated to RxFx.
 
 ## An Interview Like No Other
 
@@ -53,7 +53,7 @@ Chris chimed up with, _"Sounds good— shall we get to work then?"_
 
 ---
 
-## 𝗥𝘅𝑓𝑥—An Odd Choice of Library
+## RxFx—An Odd Choice of Library
 
 Chris started by creating a new file, naming it `gifService.ts`. I gently inquired why they made a separate file instead of coding into the provided React component.
 
@@ -73,7 +73,7 @@ export const gifService = createService("gif", bus, () => fetchRandomGif);
 
 I said - Ok, now what is this library doing?
 
-_"Have you used Redux Saga, createAsyncThunk, or other async middleware? 𝗥𝘅𝑓𝑥 is a drop-in replacement, at less than half the bundle size. The bus receives events, which the service will put onto the bus as the effect starts, provides data, etc."_
+_"Have you used Redux Saga, createAsyncThunk, or other async middleware? RxFx is a drop-in replacement, at less than half the bundle size. The bus receives events, which the service will put onto the bus as the effect starts, provides data, etc."_
 
 I knew Redux Saga. I said "The `fetchRandomGif` function - it's not written as a generator function or a saga, it just returns a Promise. Is that going to be compatible with your bus?"
 
@@ -89,7 +89,7 @@ _"Great— now let's start on our state model. It looks like there's only one fi
 
 I said "Are you forgetting the loading and error states?"
 
-_"One nice thing about an 𝗥𝘅𝑓𝑥 service is your state model doesn't need to include loading and error. You get into trouble when you mix transient fields like `loading` and `error` into state fields that you may want to persist for longer - like across sessions. Separate things that change at different rates, right?"_
+_"One nice thing about an RxFx service is your state model doesn't need to include loading and error. You get into trouble when you mix transient fields like `loading` and `error` into state fields that you may want to persist for longer - like across sessions. Separate things that change at different rates, right?"_
 
 I had just dealt with a bug where a `loading` state loaded from local storage with a value of `true` - the spinner spun but nothing was happening. It occurred to me it was not really DRY to have a state field that isn't a direct reflection of whether a process is actually running, so I was ready to see it in action.
 
@@ -211,21 +211,22 @@ When I returned, I opened up DevTools, and clicked Fetch Cat. I clicked Cancel, 
 
 ![cat loading fixed](https://s3.amazonaws.com/www.deanius.com/cat-cancel-api.jpg)
 
-Chris showed the new fetchRandomGif function - which looked like the Promise-based version. 
+Chris showed the new fetchRandomGif function - which looked like the Promise-based version.
 
 ```ts
 import { ajax } from "rxjs/ajax";
 
-const fetchRandomGif = () => ajax.getJSON({
-    url: "https://api.thecatapi.com/v1/images/search",
-  }).pipe(
-    map((r) => r.response[0].url)
-);
+const fetchRandomGif = () =>
+  ajax
+    .getJSON({
+      url: "https://api.thecatapi.com/v1/images/search",
+    })
+    .pipe(map((r) => r.response[0].url));
 ```
 
 Seeing this, I asked, "So the service can just cancel this AJAX, even without an AbortController?"
 
-_"Cancelation is automatic- as long as the endpoint returns an Observable. It's crazy - every Observable since 2012 is cancelable, and yet today we have just Promises. It's nice that in 𝗥𝘅𝑓𝑥 you can return a `Promise` to start, and an Observable when you implement cancelation."_
+_"Cancelation is automatic- as long as the endpoint returns an Observable. It's crazy - every Observable since 2012 is cancelable, and yet today we have just Promises. It's nice that in RxFx you can return a `Promise` to start, and an Observable when you implement cancelation."_
 
 This was great. I made a mental note: Suggest the whole team learn about Observables and this API around them. Promises being run-to-complete by default started to look like a very bad idea, especially when it was easy as this to swap a non-cancelable AJAX with a cancelable one.
 
@@ -237,9 +238,9 @@ Chris had exceeded expectations on the first 3 mandatory points of the challenge
 
 Chris lifted their backpack to their shoulder and smiled.
 
-_"Oh, the 𝗥𝘅𝑓𝑥 service has that covered too. Just change the call to `createService` to `createQueueingService` and you're covered. I'll send you a CodeSandbox of it later today so you can try it out."_
+_"Oh, the RxFx service has that covered too. Just change the call to `createService` to `createQueueingService` and you're covered. I'll send you a CodeSandbox of it later today so you can try it out."_
 
-And with that, Chris was gone. And my learning into RxJS and 𝗥𝘅𝑓𝑥 had just begun.
+And with that, Chris was gone. And my learning into RxJS and RxFx had just begun.
 
 ---
 
@@ -247,7 +248,7 @@ And with that, Chris was gone. And my learning into RxJS and 𝗥𝘅𝑓𝑥 ha
 
 Here's the [CodeSandbox](https://codesandbox.io/s/rxfx-service-example-data-fetcher-nweq0h) of the Cat Fetcher.
 
-As you may have guessed, this was a fictitious story, written by me, Dean, the author of 𝗥𝘅𝑓𝑥 packages. I must stress that 𝗥𝘅𝑓𝑥 was not designed to handle interview problems, but real world ones! And it has been deployed to production in various forms for 4 years, solving problems like dynamic forms, 60FPS animation, Web Sockets and many more. I hope you will give it a look, and let me know what you think!
+As you may have guessed, this was a fictitious story, written by me, Dean, the author of RxFx packages. I must stress that RxFx was not designed to handle interview problems, but real world ones! And it has been deployed to production in various forms for 4 years, solving problems like dynamic forms, 60FPS animation, Web Sockets and many more. I hope you will give it a look, and let me know what you think!
 
 And soon there will be Part 2 where we address timeouts, maintaining the loading state until the bytes of the image have arrived, and other subtleties of data fetching.
 
